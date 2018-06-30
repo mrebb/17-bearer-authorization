@@ -31,7 +31,7 @@ userSchema.statics.authenticate = function(auth) {
 };
 
 userSchema.statics.authorize = function(token) {
-  let parsedToken = jwt.verify(token, process.env.SECRET || 'emeraldcity');
+  let parsedToken = jwt.verify(token, process.env.SECRET || 'changeit');
   let query = {_id:parsedToken.id};
   return this.findOne(query)
     .then(user => {
@@ -49,7 +49,7 @@ userSchema.methods.comparePassword = function(password) {
 
 // Generate a JWT from the user id and a secret
 userSchema.methods.generateToken = function() {
-  return jwt.sign( {id:this._id}, process.env.SECRET || 'emaraldcity' );
+  return jwt.sign( {id:this._id}, process.env.SECRET || 'changeit' );
 };
 
 export default mongoose.model('users', userSchema);
