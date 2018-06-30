@@ -12,6 +12,7 @@ describe('Authentication Server', () => {
   });
   afterAll( () => {
     mongoose.connection.db.dropCollection('users');
+    mongoose.connection.db.dropCollection('employees');
     mongoose.connection.close();
     server.close();
   
