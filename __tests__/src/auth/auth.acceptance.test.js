@@ -8,7 +8,7 @@ describe('Authentication Server', () => {
   const PORT = 8888;
   server = app.start(PORT);
   beforeAll( () => {
-    mongoose.connect('mongodb://heroku_lmhxqkb3:kojev45vm9o332bftgufp6ujkk@ds239557.mlab.com:39557/heroku_lmhxqkb3');
+    mongoose.connect(process.env.MONGODB_URI);
   });
   afterAll( () => {
     mongoose.connection.db.dropCollection('users');
