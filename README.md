@@ -13,12 +13,20 @@
 * the client should pass the username and password in the body of the request
 * the server should respond with a token (generated using `jwt`)
 * the server should respond with **400 Bad Request** to a failed request
+    * Sample REQUEST & RESPONSE using POSTMAN for 200 status code
+    ```POST: https://mongodb-lab17.herokuapp.com/api/signup```
 
-### `/api/resource-name`
+      ```sample request body : {"username":"madhu", "password":"foo", "email":"foo@bar.com"}```
+
+      ``` Response as token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViNTVlMzA0ZDAzN2NhMDAxNDdkMmYwNSIsImlhdCI6MTUzMjM1NTMzMn0.y_0CzWrETYsvh064s7MU5cEDERw1rTdq7V```
+
+      ```mlab database user table after signup look like this  { "_id": { "$oid": "5b55e304d037ca00147d2f05"},"username":"madhu","password":"$2b$10$yKYEDb3bMh..uQ3IN6NXWuU4O421uHJSX8UQrCKIGlTZ38uVk3h6","email": "foo@bar.com","__v": 0}         ```
+
+### `/api/employees`
 * `POST` request
 * pass data as stringifed JSON in the body of a post request to create a new resource
 
-### `/api/resource-name/:id`
+### `/api/employees/:id`
 * `GET` request
 * pass the id of a resource though the url endpoint to `req.params` to fetch a resource   
 * `PUT` request
@@ -28,11 +36,16 @@
 
 ### `/api/signin`
 * `GET` request
-* the client should pass the username and password to the server using a `Basic:` authorization header
+* the client should pass the username and password to the server using a `Bearer token` authorization header
 * use middleware to parse the auth header for username/password
-* perform some basic validation
 * the server should respond with a token for authenticated users
 * the server should respond with **401 Unauthorized** for non-authenticated users
+    ## Sample REQUEST & RESPONSE using POSTMAN
+     ```1) GET: https://mongoldb-lab16.herokuapp.com/api/signin```
+
+      ```use Bearer Auth : Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViNTVmMmE4M2MyMzBjMDAxNDYwNTA1MiIsImlhdCI6MTUzMjM1OTMzNn0.goaByCHn4VnC1FIMbumW-33PwaxRmjdrO1JVrrnYQTE```
+      
+      ```Response:                                                 Welcome     ```
 
 ## Tests
 * created a test to ensure that your API returns a status code of 404 for routes that have not been registered
