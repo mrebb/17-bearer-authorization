@@ -72,7 +72,7 @@ MONGODB_URI=mongodb://username:password@ds239557.mlab.com:39557/heroku_lmhxqkb3
 * `DELETE` request
 * pass the id of a resource though the url endpoint *(using `req.params`)* to delete a resource   
     * Sample REQUEST & RESPONSE using POSTMAN for 200 status code
-    ```PUT: https://mongodb-lab17.herokuapp.com/api/employees/5b5668eb41844780c88e1c85```
+    ```DELETE: https://mongodb-lab17.herokuapp.com/api/employees/5b5668eb41844780c88e1c85```
 
     ```sample request body : {"name":"employee3"}```
     ```use Bearer token recieved after signup : Authorization: Bearer bWFkaHU6Zm9v```
@@ -90,7 +90,7 @@ MONGODB_URI=mongodb://username:password@ds239557.mlab.com:39557/heroku_lmhxqkb3
 * the server should respond with a token for authenticated users
 * the server should respond with **401 Unauthorized** for non-authenticated users
     ## Sample REQUEST & RESPONSE using POSTMAN
-     ```1) GET: https://mongoldb-lab16.herokuapp.com/api/signin```
+     ```1) GET: https://mongoldb-lab17.herokuapp.com/api/signin```
 
       ```use Bearer Auth : Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViNTVmMmE4M2MyMzBjMDAxNDYwNTA1MiIsImlhdCI6MTUzMjM1OTMzNn0.goaByCHn4VnC1FIMbumW-33PwaxRmjdrO1JVrrnYQTE```
       
