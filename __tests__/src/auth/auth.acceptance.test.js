@@ -2,7 +2,7 @@
 const superagent = require('superagent');
 const mongoose = require('mongoose');
 const app = require('../../../src/app.js');
-
+var token;
 describe('Authentication Server', () => {
   var server;
   const PORT = 8888;
@@ -17,36 +17,36 @@ describe('Authentication Server', () => {
     server.close();
   
   });
-
   it('should create a user login on signup',() =>{
     return superagent.post('http://localhost:8888/api/signup')
       .send({username:'madhu', password:'foo', email:'foo@bar.com'})
       .then(response=>{
+        token = response.text;
         expect(response.statusCode).toEqual(200);
         expect(response.text).toBeDefined;
       })
       .catch(err=>expect(err).toEqual('nothing here'));
   });
-  
   it('should get 200 for getting all employee records',() =>{
     return superagent.post('http://localhost:8888/api/employees')
-      .auth('madhu','foo')
+      .set({'Authorization': `Bearer ${token}` })
       .send({name:'employee1'})
       .then(response=>{
         expect(response.statusCode).toEqual(200);
         return superagent.get('http://localhost:8888/api/employees')
-          .auth('madhu','foo')
+          .set({'Authorization': `Bearer ${token}` })
           .then(response=>{
             expect(response.statusCode).toEqual(200);
-            let actual = JSON.parse(response.text);
-            expect(actual.name).toEqual('employee1');
+            let actual = response.text.toString();
+            let employee = JSON.parse(actual);
+            expect(employee[0].name).toEqual('employee1');
           })
           .catch(err=>expect(err).toEqual('nothing here'));
       });
   });
   it('should get 200 for getting a particular employee record',() =>{
     return superagent.post('http://localhost:8888/api/employees')
-      .auth('madhu','foo')
+      .set({'Authorization': `Bearer ${token}` })
       .send({name:'employee2'})
       .then(response=>{
         expect(response.statusCode).toEqual(200);
@@ -66,7 +66,7 @@ describe('Authentication Server', () => {
   it('should get 404 for valid get request to resource with an id that was not found',() =>{
     
     return superagent.get('http://localhost:8888/api/employees/767362637273')
-      .auth('madhu','foo')
+      .set({'Authorization': `Bearer ${token}` })
       .catch(err=>{
         expect(err.status).toEqual(404);
         expect(err.toString()).toEqual('Error: Not Found');
@@ -85,7 +85,7 @@ describe('Authentication Server', () => {
   it('should get 400 for PUT request when no body was provided',() =>{
     
     return superagent.put('http://localhost:8888/api/employees/5b37f56e9ad5176907b610c3')
-      .auth('madhu','foo')
+      .set({'Authorization': `Bearer ${token}` })
       .catch(err=>{
         expect(err.status).toEqual(400);
         expect(err.toString()).toEqual('Error: Bad Request');
@@ -94,7 +94,7 @@ describe('Authentication Server', () => {
   it('should get 404 for a valid PUT request made with an id that was not found',() =>{
     
     return superagent.put('http://localhost:8888/api/employees/2323232323')
-      .auth('madhu','foo')
+      .set({'Authorization': `Bearer ${token}` })
       .send({name:'updatedemployee'})
       .catch(err=>{
         expect(err.status).toEqual(404);
@@ -114,7 +114,7 @@ describe('Authentication Server', () => {
   
   it('should handle updating a particular employee record',() =>{
     return superagent.post('http://localhost:8888/api/employees')
-      .auth('madhu','foo')
+      .set({'Authorization': `Bearer ${token}` })
       .send({name:'employee3'})
       .then(response=>{
         expect(response.statusCode).toEqual(200);
@@ -143,7 +143,7 @@ describe('Authentication Server', () => {
   });
   it('should get 400 for POST request when no body was provided',() =>{
     return superagent.post('http://localhost:8888/api/employees')
-      .auth('madhu','foo')
+      .set({'Authorization': `Bearer ${token}` })
       .catch(err=>{
         expect(err.status).toEqual(400);
         expect(err.toString()).toEqual('Error: Bad Request');
@@ -152,7 +152,7 @@ describe('Authentication Server', () => {
   it('should get 200 for posting an employee record',() =>{
     
     return superagent.post('http://localhost:8888/api/employees')
-      .auth('madhu','foo')
+      .set({'Authorization': `Bearer ${token}` })
       .send({name:'employee5'})
       .then(response=>{
         expect(response.statusCode).toEqual(200);
@@ -164,7 +164,7 @@ describe('Authentication Server', () => {
   });
   it('should delete a particular employee record',() =>{
     return superagent.post('http://localhost:8888/api/employees')
-      .auth('madhu','foo')
+      .set({'Authorization': `Bearer ${token}` })
       .send({name:'employee6'})
       .then(response=>{
         expect(response.statusCode).toEqual(200);
@@ -176,21 +176,6 @@ describe('Authentication Server', () => {
             expect(response.statusCode).toEqual(200);
             let actual = JSON.parse(response.text);
             expect(actual.name).toEqual('employee6');
-          })
-          .catch(err=>expect(err).toEqual('nothing here'));
-      });
-  });
-  xit('should post employee record',() =>{
-    return superagent.get('http://localhost:8888/api/signin')
-      .auth('madhu','foo')
-      .then(response => {
-        expect(response.statusCode).toEqual(200);
-        expect(response.text).toEqual('Welcome');
-        return superagent.post('http://localhost:8888/api/employees')
-          .send({name:'madhu'})
-          .then(response=>{
-            expect(response.statusCode).toEqual(200);
-            expect(response.text).toEqual('test');
           })
           .catch(err=>expect(err).toEqual('nothing here'));
       });
@@ -243,7 +228,7 @@ describe('Authentication Server', () => {
   });
   it('should throw 404 if route not found',() =>{
     return superagent.post('http://localhost:8888/noroute')
-      .send({username:'madhu', password:'foo', email:'foo@bar.com'})
+      .set({'Authorization': `Bearer ${token}` })
       .catch(err=>{
         expect(err.status).toEqual(404);
         expect(err.toString()).toEqual('Error: Not Found');

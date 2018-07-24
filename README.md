@@ -6,6 +6,12 @@
 
 ## HEROKU: https://mongodb-lab17.herokuapp.com
 
+## mLab: mongodb://testUser:test@123@ds239557.mlab.com:39557/heroku_lmhxqkb3 
+
+## Sample env: 
+PORT=3000
+MONGODB_URI=mongodb://username:password@ds239557.mlab.com:39557/heroku_lmhxqkb3
+
 ## Server Endpoints
 
 ### `/api/signup`
@@ -25,14 +31,57 @@
 ### `/api/employees`
 * `POST` request
 * pass data as stringifed JSON in the body of a post request to create a new resource
+   * Sample REQUEST & RESPONSE using POSTMAN for 200 status code
+    ```POST: https://mongodb-lab17.herokuapp.com/api/employees```
+
+    ```sample request body : {"name":"employee1"}```
+    ```use Bearer token recieved after signup : Authorization: Bearer bWFkaHU6Zm9v```
+    ```Response : {
+    "_id": "5b5668eb41844780c88e1c85",
+    "name": "employee1",
+    "userID": "5b5668d041844780c88e1c84",
+    "__v": 0
+    }  ```
 
 ### `/api/employees/:id`
 * `GET` request
 * pass the id of a resource though the url endpoint to `req.params` to fetch a resource   
+   * Sample REQUEST & RESPONSE using POSTMAN for 200 status code
+    ```GET: https://mongodb-lab17.herokuapp.com/api/employees/5b5668eb41844780c88e1c85```
+    ```use Bearer token recieved after signup : Authorization: Bearer bWFkaHU6Zm9v```
+    ```Response : {
+    "_id": "5b5668eb41844780c88e1c85",
+    "name": "employee1",
+    "userID": "5b5668d041844780c88e1c84",
+    "__v": 0
+    }  ```
 * `PUT` request
 * pass data as stringifed JSON in the body of a put request to update a resource
+     * Sample REQUEST & RESPONSE using POSTMAN for 200 status code
+    ```PUT: https://mongodb-lab17.herokuapp.com/api/employees/5b5668eb41844780c88e1c85```
+
+    ```sample request body : {"name":"employee3"}```
+    ```use Bearer token recieved after signup : Authorization: Bearer bWFkaHU6Zm9v```
+    ```Response : {
+    "_id": "5b5668eb41844780c88e1c85",
+    "name": "employee3",
+    "userID": "5b5668d041844780c88e1c84",
+    "__v": 0
+    } ```
+      
 * `DELETE` request
 * pass the id of a resource though the url endpoint *(using `req.params`)* to delete a resource   
+    * Sample REQUEST & RESPONSE using POSTMAN for 200 status code
+    ```PUT: https://mongodb-lab17.herokuapp.com/api/employees/5b5668eb41844780c88e1c85```
+
+    ```sample request body : {"name":"employee3"}```
+    ```use Bearer token recieved after signup : Authorization: Bearer bWFkaHU6Zm9v```
+    ```Response : {
+    "_id": "5b5668eb41844780c88e1c85",
+    "name": "employee3",
+    "userID": "5b5668d041844780c88e1c84",
+    "__v": 0
+    } ``` 
 
 ### `/api/signin`
 * `GET` request

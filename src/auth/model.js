@@ -31,14 +31,14 @@ userSchema.statics.authenticate = function(auth) {
 };
 
 userSchema.statics.authorize = function(token) {
-  let parsedToken = jwt.verify(token, process.env.SECRET || 'changeit');
+  let parsedToken = jwt.verify(token, process.env.APP_SECRET || 'emeraldcity');
   let query = {_id:parsedToken.id};
   return this.findOne(query)
     .then(user => {
       // looked up their role and then all capabilities
       return user;
     })
-    .catch(error => error);
+    .catch(error => console.log(error));
 };
 
 // Compare a plain text password against the hashed one we have saved
@@ -49,7 +49,7 @@ userSchema.methods.comparePassword = function(password) {
 
 // Generate a JWT from the user id and a secret
 userSchema.methods.generateToken = function() {
-  return jwt.sign( {id:this._id}, process.env.SECRET || 'changeit' );
+  return jwt.sign( {id:this._id}, process.env.APP_SECRET || 'emeraldcity' );
 };
 
 export default mongoose.model('users', userSchema);
