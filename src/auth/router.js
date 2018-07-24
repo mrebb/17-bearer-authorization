@@ -29,6 +29,10 @@ authRouter.get('/signin',auth, (req, res) => {
   res.cookie('Token', req.token);
   res.send('Welcome');
 });
+authRouter.post('/tests', auth,(req, res) => {
+  console.log(req);
+  res.send(`hello`);
+});
 
 authRouter.post('/employees', auth,(req, res) => {
   if(Object.keys(req.body).length === 0){
@@ -36,7 +40,15 @@ authRouter.post('/employees', auth,(req, res) => {
     res.send('Bad Request: Request body not received');
     return;
   }
-  User.authorize(req.token)
+  let authHeader = req.headers.authorization;
+  var token;
+  if(authHeader && authHeader.match(/bearer/i)){
+    token = authHeader.replace(/bearer\s+/i, '');
+  }
+  else {
+    token = req.token;
+  }
+  User.authorize(token)
     .then(user=>{
       req.body.userID = user._id;
       Employee.create(req.body)
@@ -45,9 +57,17 @@ authRouter.post('/employees', auth,(req, res) => {
     );
 });
 authRouter.get('/employees',auth, (req, res) => {
-  User.authorize(req.token)
+  let authHeader = req.headers.authorization;
+  var token;
+  if(authHeader && authHeader.match(/bearer/i)){
+    token = authHeader.replace(/bearer\s+/i, '');
+  }
+  else {
+    token = req.token;
+  }
+  User.authorize(token)
     .then(user=>{
-      Employee.findOne({'userID':user._id})
+      Employee.find({'userID':user._id})
         .then(data=>res.send(data));
     }
     );
@@ -58,7 +78,15 @@ authRouter.get('/employees/:id',auth, (req, res) => {
     res.send('Bad Request: Request body not received');
     return;
   }
-  User.authorize(req.token)
+  let authHeader = req.headers.authorization;
+  var token;
+  if(authHeader && authHeader.match(/bearer/i)){
+    token = authHeader.replace(/bearer\s+/i, '');
+  }
+  else {
+    token = req.token;
+  }
+  User.authorize(token)
     .then(user=>{
       Employee.findOne({'userID':user._id,'_id':req.params.id})
         .then(data=>res.send(data))
@@ -75,7 +103,15 @@ authRouter.put('/employees/:id',auth, (req, res) => {
     res.send('Bad Request: Request body not received');
     return;
   }
-  User.authorize(req.token)
+  let authHeader = req.headers.authorization;
+  var token;
+  if(authHeader && authHeader.match(/bearer/i)){
+    token = authHeader.replace(/bearer\s+/i, '');
+  }
+  else {
+    token = req.token;
+  }
+  User.authorize(token)
     .then(user=>{
       Employee.findOneAndUpdate({'userID':user._id,'_id':req.params.id},{$set:req.body},{new: true})
         .then(data=>res.send(data))
@@ -91,7 +127,15 @@ authRouter.delete('/employees/:id',auth, (req, res) => {
     res.send('Bad Request: Request body not received');
     return;
   }
-  User.authorize(req.token)
+  let authHeader = req.headers.authorization;
+  var token;
+  if(authHeader && authHeader.match(/bearer/i)){
+    token = authHeader.replace(/bearer\s+/i, '');
+  }
+  else {
+    token = req.token;
+  }
+  User.authorize(token)
     .then(user=>{
       Employee.findOneAndRemove({'userID':user._id,'_id':req.params.id})
         .then(data=>res.send(data))
